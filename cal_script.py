@@ -13,7 +13,7 @@ parser.add_argument('path', type=str, help='path on server')
 parser.add_argument('sc', type=float, help='scale factor')
 
 args = parser.parse_args()
-structure = read_gro(f'cal_104/cal.gro')
+structure = read_gro(f'cal_104_old/cal.gro')
 
 WIDTH_X, WIDTH_Y, HEIGHT = structure.box
 
@@ -175,7 +175,7 @@ for i in range(len(files)):
 files = ['tip4p.itp', 'decane.itp', 'cal.itp']
 for file in files:
     os.system(f'scp {dir}/itp/{file} {server_name}:{args.path}/{folder}')
-os.system(f'scp cal_104/calmol.itp {server_name}:{args.path}/{folder}')
+os.system(f'scp cal_104_old/calmol.itp {server_name}:{args.path}/{folder}')
 
 os.system(f'scp {dir}/modified_ff/trappe_cal_x{round(args.sc, 1)}.top {server_name}:{args.path}/{folder}/trappe_cal_x{round(args.sc, 1)}.top')
 
