@@ -10,7 +10,7 @@ class Atom:
     xyz: np.array = field(default_factory=np.array)
 
     def make_gro_line(self) -> str:
-        start = f'{self.mol_id:5d}{self.mol_name:<5}{self.name:>5}{self.id:5d}'
+        start = f'{self.mol_id:5d}{self.mol_name:<5}{self.name:>5}{self.id%100000:5d}'
         coords = ''.join([f'{x:8.3f}' for x in self.xyz])
         return f'{start}{coords}'
 

@@ -50,8 +50,8 @@ class Structure:
 
         return new_structure
 
-    def apply_pbc(self):
-        return self.set_XYZ(apply_pbc_to_points(self.atoms_xyz, self.box))
+    def apply_pbc(self, mask=np.array([1, 1, 1], dtype=bool)):
+        return self.set_XYZ(apply_pbc_to_points(self.atoms_xyz, self.box, mask))
 
     def center_atoms_to_zero(self, mol_names=None):
         return self.set_XYZ(self.atoms_xyz - self.get_center_pbc(mol_names))

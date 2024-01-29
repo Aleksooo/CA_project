@@ -1,0 +1,24 @@
+[moleculetype]
+; molname nrexcl
+  CAA    2
+
+[atoms]
+;  nr  type  resnr  residu  atome  cgnr  charge  mass
+    1   CA    1  CAA   CA    1    2.0000   40.078
+
+[moleculetype]
+; molname nrexcl
+ CCAA    2
+
+[atoms]
+;  nr  type  resnr  residu  atome  cgnr  charge  mass
+    1  CCA    1 CCAA  CCA    1    1.123   12.011
+
+
+[moleculetype]
+ ; molname   nrexcl
+ OCAA               2
+
+[atoms]
+;  nr  type  resnr  residu  atome  cgnr  charge  mass
+    1  OCA    1 OCAA  OCA    1   -1.041   16

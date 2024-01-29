@@ -14,12 +14,12 @@ def distance_pbc2(point1: np.array, points: np.array, box_size: np.array) -> np.
 def distance_pbc(point1: np.array, points: np.array, box_size: np.array) -> np.array:
     return np.sqrt(distance_pbc2(point1, points, box_size))
 
-def apply_pbc_to_points(points: np.array, box_size: np.array):
+def apply_pbc_to_points(points: np.array, box_size: np.array, mask: np.array):
     points_pbc = points.copy()
-    half_box_size = box_size / 2
+    half_box_size = box_size[0:3] / 2
 
     idx_pbc = abs(points_pbc - half_box_size) >= half_box_size
-    points_pbc -= np.sign(points_pbc) * box_size * idx_pbc
+    points_pbc -= np.sign(points_pbc) * box_size[0:3] * idx_pbc * mask
 
     return points_pbc
 

@@ -95,6 +95,7 @@ void push_atoms_apart(
 
         std::cout << "Iteration " << iter;
         timer.start();
+
         for (size_t i = 0; i < sys.atoms.size() - 1; i++) {
             // if (sys.atoms[i].name[0] == 'H') {
             //     continue;

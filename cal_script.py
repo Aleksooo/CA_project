@@ -10,10 +10,10 @@ parser.add_argument('H', type=float, help='Slot H')
 parser.add_argument('phi', type=float, help='Amoung of water')
 parser.add_argument('build', type=int, help='Build system flag')
 parser.add_argument('path', type=str, help='path on server')
-parser.add_argument('sc', type=float, help='scale factor')
+# parser.add_argument('sc', type=float, help='scale factor')
 
 args = parser.parse_args()
-structure = read_gro(f'cal_104_old/cal.gro')
+structure = read_gro(f'cal_104/cal.gro')
 
 WIDTH_X, WIDTH_Y, HEIGHT = structure.box
 
@@ -24,8 +24,9 @@ delta_h = 0.2
 frac = args.phi
 
 # Конфигурация половины
-folder = f'cal_{H:.1f}_{frac:.1f}'
-dir = 'ff/trappe'
+folder = f'cal_trappe_tip4p_dodecane'
+ff = 'trappe'
+dir = 'ff/'+ff
 
 ''' ПАРАМЕТРЫ НЕ ТРОГАТЬ!!! '''
 insertion_limit = int(1e5)
@@ -37,9 +38,11 @@ system_size = np.array([WIDTH_X, WIDTH_Y, HEIGHT + H])
 points = structure.atoms_xyz
 structure.box = system_size
 
-names = ['decane', 'tip4p']
-density = [3, 33] # nm-3
+names = ['dodecane', 'tip4p']
+density = [2.64, 33.3277] # nm-3
 
+
+# XZ surface
 box_left = Box(
     center=np.array([WIDTH_X*(1-frac)/2, WIDTH_Y/2, HEIGHT + H/2]),
     borders=np.array([WIDTH_X*(1-frac), WIDTH_Y, H])
@@ -128,18 +131,19 @@ with open(f'systems/{folder}/run.sh', 'w') as f:
     f.write(f'''#!/bin/bash
 #SBATCH -J gromacs
 #SBATCH -N 1\t# Number of nodes requested
-#SBATCH -n 4\t# Total number of mpi tasks requested
+#SBATCH -n 16\t# Total number of mpi tasks requested
+#SBATCH --cpus-per-task 2\t# Total number of omp tasks requested
 
-gmx grompp -f nvt_cal_steep.mdp -c {filename}_init.gro -p trappe_cal_x{round(args.sc, 1)}.top -o {filename} -maxwarn 10
+gmx grompp -f nvt_cal_steep.mdp -c {filename}_init.gro -p {ff}.top -o {filename} -maxwarn 10
 prun gmx_mpi mdrun -s -o -x -c -e -g -v -deffnm {filename} -ntomp 2 -gpu_id 0
 rm ./#*#
 rm *pdb
 
-gmx grompp -f nvt_cal_short.mdp -c {filename}.gro -p trappe_cal_x{round(args.sc, 1)}.top -o {filename} -maxwarn 10
+gmx grompp -f nvt_cal_short.mdp -c {filename}.gro -p {ff}.top -o {filename} -maxwarn 10
 prun gmx_mpi mdrun -s -o -x -c -e -g -v -deffnm {filename} -ntomp 2 -gpu_id 0
 rm ./#*#
 
-gmx grompp -f nvt_cal_run.mdp -c {filename}.gro -p trappe_cal_x{round(args.sc, 1)}.top -o {filename} -maxwarn 10
+gmx grompp -f nvt_cal_run.mdp -c {filename}.gro -p {ff}.top -o {filename} -maxwarn 10
 prun gmx_mpi mdrun -s -o -x -c -e -g -v -deffnm {filename} -ntomp 2 -gpu_id 0
 rm ./#*#
     ''')
@@ -172,12 +176,12 @@ files = list((args.path+'/'+folder).split('/'))
 for i in range(len(files)):
     os.system(f"ssh {server_name} 'mkdir {'~/'+'/'.join(files[:i+1])}'")
 
-files = ['tip4p.itp', 'decane.itp', 'cal.itp']
-for file in files:
-    os.system(f'scp {dir}/itp/{file} {server_name}:{args.path}/{folder}')
-os.system(f'scp cal_104_old/calmol.itp {server_name}:{args.path}/{folder}')
+for name in names:
+    os.system(f'scp {dir}/itp/{name}.itp {server_name}:{args.path}/{folder}')
+os.system(f'scp {dir}/itp/cal.itp {server_name}:{args.path}/{folder}')
+os.system(f'scp cal_104/calmol.itp {server_name}:{args.path}/{folder}')
 
-os.system(f'scp {dir}/modified_ff/trappe_cal_x{round(args.sc, 1)}.top {server_name}:{args.path}/{folder}/trappe_cal_x{round(args.sc, 1)}.top')
+os.system(f'scp {dir}/{ff}.top {server_name}:{args.path}/{folder}/{ff}.top')
 
 files = ['nvt_cal_steep.mdp', 'nvt_cal_short.mdp', 'nvt_cal_run.mdp']
 for file in files:

@@ -1,0 +1,57 @@
+[ moleculetype ]
+; name    nrexcl
+ dodecane     3
+
+[ atoms ]
+;  nr    type  resnr   residue    atom    chnr     charge
+    1     CH3      1    DODEC       C1       1       0.00
+    2     CH2      1    DODEC       C2       2       0.00
+    3     CH2      1    DODEC       C3       3       0.00
+    4     CH2      1    DODEC       C4       4       0.00
+    5     CH2      1    DODEC       C5       5       0.00
+    6     CH2      1    DODEC       C6       6       0.00
+    7     CH2      1    DODEC       C7       7       0.00
+    8     CH2      1    DODEC       C8       8       0.00
+    9     CH2      1    DODEC       C9       9       0.00
+   10     CH2      1    DODEC      C10      10       0.00
+   11     CH2      1    DODEC      C11      11       0.00
+   12     CH3      1    DODEC      C12      12       0.00
+
+[ bonds ]
+;   i    j func
+    1    2    1
+    2    3    1
+    3    4    1
+    4    5    1
+    5    6    1
+    6    7    1
+    7    8    1
+    8    9    1
+    9   10    1
+   10   11    1
+   11   12    1
+
+[ angles ]
+;   i    j    k func
+    1    2    3    1
+    2    3    4    1
+    3    4    5    1
+    4    5    6    1
+    5    6    7    1
+    6    7    8    1
+    7    8    9    1
+    8    9   10    1
+    9   10   11    1
+   10   11   12    1
+
+[ dihedrals ]
+;   i    j    k    l func
+    1    2    3    4    3
+    2    3    4    5    3
+    3    4    5    6    3
+    4    5    6    7    3
+    5    6    7    8    3
+    6    7    8    9    3
+    7    8    9   10    3
+    8    9   10   11    3
+    9   10   11   12    3

@@ -9,6 +9,9 @@ def insert_point_into_shape(
     insertion_limit = int(1e5),
     package = 0.4
 ):
+    if (mol_size < 0.05) :
+        mol_size = 0.05
+
     overlap = True
     insertion_counter = 0
 
